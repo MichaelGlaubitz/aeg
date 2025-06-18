@@ -6,17 +6,28 @@
     <title>Lernpfad: Gewichtskraft und Masse</title>
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; margin: 0; padding: 20px; background-color: #f4f4f9; color: #333; }
-      .container { max-width: 800px; margin: auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+     .container { max-width: 800px; margin: auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
         h1, h2, h3 { color: #0056b3; border-bottom: 2px solid #0056b3; padding-bottom: 10px; }
-      .step { background-color: #e7f3ff; border-left: 5px solid #007bff; padding: 15px; margin-top: 20px; border-radius: 5px; }
-      .task { margin-top: 15px; }
-      .task-list { list-style-type: none; padding-left: 0; }
-      .task-list li { background: #fff; margin-bottom: 10px; padding: 10px; border-radius: 5px; border: 1px solid #ddd; }
-      .tool-link { display: inline-block; background-color: #28a745; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px; margin-top: 10px; font-weight: bold; }
-      .tool-link:hover { background-color: #218838; }
+     .step { background-color: #e7f3ff; border-left: 5px solid #007bff; padding: 15px; margin-top: 20px; border-radius: 5px; }
+     .task { margin-top: 15px; }
+     .task-list { list-style-type: none; padding-left: 0; }
+     .task-list li { background: #fff; margin-bottom: 10px; padding: 10px; border-radius: 5px; border: 1px solid #ddd; }
+     .tool-link { display: inline-block; background-color: #28a745; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px; margin-top: 10px; font-weight: bold; }
+     .tool-link:hover { background-color: #218838; }
         img { max-width: 100%; height: auto; border-radius: 5px; }
-      .info-box { background-color: #fff3cd; border: 1px solid #ffeeba; padding: 15px; border-radius: 5px; margin-top: 15px; }
-      .expert { background-color: #d1ecf1; border-left-color: #0c5460; }
+     .info-box { background-color: #fff3cd; border: 1px solid #ffeeba; padding: 15px; border-radius: 5px; margin-top: 15px; }
+     .expert { background-color: #d1ecf1; border-left-color: #0c5460; }
+     .hypothesis-input {
+            width: 100%;
+            min-height: 60px;
+            margin-top: 10px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-family: inherit;
+            font-size: 1em;
+            box-sizing: border-box;
+        }
     </style>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -26,19 +37,20 @@
     <div class="container">
         <h1>Lernpfad: Gewichtskraft und Masse</h1>
         <p>Willkommen! In dieser Stunde untersuchen wir, was der Unterschied zwischen Masse und Gewicht ist und warum ein Astronaut auf dem Mond so hoch springen kann. Bearbeite die folgenden Schritte in deinem eigenen Tempo.</p>
-		<img src="https://1drv.ms/i/c/ef5e4b117698c04a/IQRKwJh2EUteIIDv7lgNAAAAAQvzaUP8v-u4FMRFYSB_gfw?width=1588&height=1052" width="1588" height="1052" alt="Ausschnitt aus dem Physikbuch mit einem Astronauten auf dem Mond." />
-
+        <img src="https://storage.googleapis.com/prompt-engineering/de-2/8-klasse-physik-buch.jpg" alt="Ausschnitt aus dem Physikbuch mit einem Astronauten auf dem Mond." />
 
         <div class="step">
             <h2>Schritt 1: Ein Sprung zum Mond (ca. 8 Min.)</h2>
             <div class="task">
                 <p>Betrachte das Bild oben. Warum können Astronauten auf dem Mond so viel höher springen als auf der Erde?</p>
                 <ol>
-                    <li><strong>Think (2 Min.):</strong> Formuliere eine erste Vermutung für dich allein.</li>
+                    <li><strong>Think (2 Min.):</strong> Formuliere eine erste Vermutung für dich allein.
+                        <textarea class="hypothesis-input" placeholder="Schreibe deine erste Idee hier auf..."></textarea>
+                    </li>
                     <li><strong>Pair (2 Min.):</strong> Besprich deine Idee mit deiner Nachbarin oder deinem Nachbarn.</li>
                     <li><strong>Share (4 Min.):</strong> Postet eure gemeinsame Hypothese als digitale Notiz auf diesem Whiteboard:</li>
                 </ol>
-                <a href="https://r8.whiteboardfox.com/86167390-2071-8588" target="_blank" class="tool-link">Zum Online-Whiteboard</a>
+                <a href="https://whiteboardfox.com/" target="_blank" class="tool-link">Zum Online-Whiteboard</a>
             </div>
         </div>
 
@@ -48,7 +60,7 @@
             <ul class="task-list">
                 <li>
                     <strong>Aufgabe 1: Grundlagen aus dem Buch</strong><br>
-                    Lies auf S. 84 die Texte „Warum ist ein Körper schwer?“ und „Eine Eigenschaft aller Körper“. Notiere die Definitionen für <strong>Masse</strong> und <strong>Gewichtskraft</strong> (Formelzeichen, Einheit, Eigenschaft).
+                    Lies auf S. 84 die Texte „Warum ist ein Körper schwer?“ und „Eine Eigenschaft des Körpers“. Notiere die Definitionen für <strong>Masse</strong> und <strong>Gewichtskraft</strong> (Formelzeichen, Einheit, Eigenschaft).
                 </li>
                 <li>
                     <strong>Aufgabe 2: Virtuelles Labor</strong><br>
@@ -57,7 +69,7 @@
                 </li>
                 <li>
                     <strong>Aufgabe 3: Geleitete Experimente</strong><br>
-                    a) Stelle in der Simulation Masse 1 auf 50 kg und Masse 2 auf 100 kg. Notiere die Kraft. Verdopple nun Masse 1 auf 100 kg. Was passiert mit der Kraft?<br>
+                    a) Stelle in der Simulation Masse 1 auf 2 Mrd. kg und Masse 2 auf 4 Mrd. kg ein. Notiere die Kraft. Verdopple nun Masse 1 auf 4 Mrd. kg. Was passiert mit der Kraft?<br>
                     b) Vergrößere den Abstand der beiden Kugeln. Was passiert mit der Kraft?
                 </li>
                 <li class="expert">
@@ -68,7 +80,7 @@
         </div>
 
         <div class="step">
-			<h2>Schritt 3: Reise durch das Sonnensystem (ca. 12 Min.)</h2>
+            <h2>Schritt 3: Reise durch das Sonnensystem (ca. 12 Min.)</h2>
             <p>Wende nun die Formel $F_G = m \cdot g$ an. Nutze die Tabelle auf S. 85 in deinem Buch für die Ortsfaktoren.</p>
             <ul class="task-list">
                 <li><strong>1. Auf der Erde:</strong> Berechne deine eigene Gewichtskraft auf der Erde. Runde deine Masse auf eine ganze Zahl.</li>
@@ -101,9 +113,9 @@
                 <div class="info-box">
                     <strong>Starter-Links für deine Recherche:</strong><br>
                     <ul>
-                        <li><a href="https://www.dlr.de/de/next/raumfahrt/spannendes/ihr-fragt-wir-antworten/mit-einer-schnur-zu-anderen-himmelskorpern" target="_blank">DLR: Mit einer Schnur zu anderen Himmelskörpern</a> [1]</li>
-                        <li><a href="https://magazin.schindler.de/technologie/weltraumlift-mit-dem-aufzug-ins-all" target="_blank">Weltraumlift: Mit dem Aufzug ins All</a> [2]</li>
-                        <li><a href="https://www.ingenieur.de/technik/fachbereiche/raumfahrt/japaner-experimentieren-auf-der-iss-mit-weltraum-aufzug/" target="_blank">Japaner experimentieren mit Weltraum-Aufzug</a> [3]</li>
+                        <li><a href="https://www.dlr.de/de/next/raumfahrt/spannendes/ihr-fragt-wir-antworten/mit-einer-schnur-zu-anderen-himmelskorpern" target="_blank">DLR: Mit einer Schnur zu anderen Himmelskörpern</a></li>
+                        <li><a href="https://magazin.schindler.de/technologie/weltraumlift-mit-dem-aufzug-ins-all" target="_blank">Weltraumlift: Mit dem Aufzug ins All</a></li>
+                        <li><a href="https://www.ingenieur.de/technik/fachbereiche/raumfahrt/japaner-experimentieren-auf-der-iss-mit-weltraum-aufzug/" target="_blank">Japaner experimentieren mit Weltraum-Aufzug</a></li>
                     </ul>
                 </div>
             </div>
