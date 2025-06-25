@@ -6,18 +6,18 @@
     <title>Lernpfad: Gewichtskraft und Masse</title>
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; margin: 0; padding: 20px; background-color: #f4f4f9; color: #333; }
-     .container { max-width: 800px; margin: auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+       .container { max-width: 800px; margin: auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
         h1, h2, h3 { color: #0056b3; border-bottom: 2px solid #0056b3; padding-bottom: 10px; }
-     .step { background-color: #e7f3ff; border-left: 5px solid #007bff; padding: 15px; margin-top: 20px; border-radius: 5px; }
-     .task { margin-top: 15px; }
-     .task-list { list-style-type: none; padding-left: 0; }
-     .task-list li { background: #fff; margin-bottom: 10px; padding: 10px; border-radius: 5px; border: 1px solid #ddd; }
-     .tool-link { display: inline-block; background-color: #28a745; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px; margin-top: 10px; font-weight: bold; }
-     .tool-link:hover { background-color: #218838; }
+       .step { background-color: #e7f3ff; border-left: 5px solid #007bff; padding: 15px; margin-top: 20px; border-radius: 5px; }
+       .task { margin-top: 15px; }
+       .task-list { list-style-type: none; padding-left: 0; }
+       .task-list li { background: #fff; margin-bottom: 10px; padding: 10px; border-radius: 5px; border: 1px solid #ddd; }
+       .tool-link { display: inline-block; background-color: #28a745; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px; margin-top: 10px; font-weight: bold; }
+       .tool-link:hover { background-color: #218838; }
         img { max-width: 100%; height: auto; border-radius: 5px; }
-     .info-box { background-color: #fff3cd; border: 1px solid #ffeeba; padding: 15px; border-radius: 5px; margin-top: 15px; }
-     .expert { background-color: #d1ecf1; border-left-color: #0c5460; }
-     .hypothesis-input {
+       .info-box { background-color: #fff3cd; border: 1px solid #ffeeba; padding: 15px; border-radius: 5px; margin-top: 15px; }
+       .expert { background-color: #d1ecf1; border-left-color: #0c5460; }
+       .hypothesis-input {
             width: 100%;
             min-height: 60px;
             margin-top: 10px;
@@ -28,6 +28,20 @@
             font-size: 1em;
             box-sizing: border-box;
         }
+       .submit-button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+       .submit-button:hover { background-color: #0056b3; }
+        #submit-status { margin-top: 10px; font-weight: bold; text-align: center; }
     </style>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -37,15 +51,19 @@
     <div class="container">
         <h1>Lernpfad: Gewichtskraft und Masse</h1>
         <p>Willkommen! In dieser Stunde untersuchen wir, was der Unterschied zwischen Masse und Gewicht ist und warum ein Astronaut auf dem Mond so hoch springen kann. Bearbeite die folgenden Schritte in deinem eigenen Tempo.</p>
-        
-        <img src="https://1drv.ms/i/c/ef5e4b117698c04a/IQRKwJh2EUteIIDv7lgNAAAAAQvzaUP8v-u4FMRFYSB_gfw?width=1588&height=1052" width="1588" height="1052" />
+        <img src="https://storage.googleapis.com/prompt-engineering/de-2/8-klasse-physik-buch.jpg" alt="Ausschnitt aus dem Physikbuch mit einem Astronauten auf dem Mond." />
+
         <div class="step">
             <h2>Schritt 1: Ein Sprung zum Mond (ca. 8 Min.)</h2>
             <div class="task">
                 <p>Betrachte das Bild oben. Warum können Astronauten auf dem Mond so viel höher springen als auf der Erde?</p>
                 <ol>
-                    <li><strong>Think (2 Min.):</strong> Formuliere eine erste Vermutung für dich allein.
-                        <textarea class="hypothesis-input" placeholder="Schreibe deine erste Idee hier auf..."></textarea>
+                    <li><strong>Think (2 Min.):</strong> Formuliere eine erste Vermutung für dich allein und sende sie ab.
+                        <form id="hypothesis-form">
+                            <textarea name="hypothesis" class="hypothesis-input" placeholder="Schreibe deine erste Idee hier auf..." required></textarea>
+                            <button type="submit" class="submit-button">Hypothese senden</button>
+                            <div id="submit-status"></div>
+                        </form>
                     </li>
                     <li><strong>Pair (2 Min.):</strong> Besprich deine Idee mit deiner Nachbarin oder deinem Nachbarn.</li>
                     <li><strong>Share (4 Min.):</strong> Postet eure gemeinsame Hypothese als digitale Notiz auf diesem Whiteboard:</li>
@@ -56,72 +74,45 @@
 
         <div class="step">
             <h2>Schritt 2: Das Geheimnis von Masse und Gewicht (ca. 15 Min.)</h2>
-            <p>Jetzt ist es Zeit, den Dingen auf den Grund zu gehen. Bearbeite die folgenden Aufgaben in deiner Notizen-App.</p>
-            <ul class="task-list">
-                <li>
-                    <strong>Aufgabe 1: Grundlagen aus dem Buch</strong><br>
-                    Lies auf S. 84 die Texte „Warum ist ein Körper schwer?“ und „Eine Eigenschaft des Körpers“. Notiere die Definitionen für <strong>Masse</strong> und <strong>Gewichtskraft</strong> (Formelzeichen, Einheit, Eigenschaft).
-                </li>
-                <li>
-                    <strong>Aufgabe 2: Virtuelles Labor</strong><br>
-                    Öffne die PhET-Simulation „Gravitationskraft“. Experimentiere frei und beobachte, wie sich die Anziehungskraft ändert, wenn du die Massen und den Abstand veränderst.
-                    <br><a href="https://phet.colorado.edu/de/simulations/gravity-force-lab-basics" target="_blank" class="tool-link">PhET-Simulation starten</a>
-                </li>
-                <li>
-                    <strong>Aufgabe 3: Geleitete Experimente</strong><br>
-                    a) Stelle in der Simulation Masse 1 auf 2 Mrd. kg und Masse 2 auf 4 Mrd. kg ein. Notiere die Kraft. Verdopple nun Masse 1 auf 4 Mrd. kg. Was passiert mit der Kraft?<br>
-                    b) Vergrößere den Abstand der beiden Kugeln. Was passiert mit der Kraft?
-                </li>
-                <li class="expert">
-                    <strong>Zusatzaufgabe für Forscher:</strong><br>
-                    Die Formel im Buch lautet $F_G = m \cdot g$. Der Ortsfaktor $g$ gibt die Stärke der Anziehung an. Wie hängt der Ortsfaktor $g$ eines Planeten von seiner eigenen Masse ab? Formuliere eine Vermutung basierend auf deinen Beobachtungen.
-                </li>
-            </ul>
-        </div>
-
+            </div>
         <div class="step">
             <h2>Schritt 3: Reise durch das Sonnensystem (ca. 12 Min.)</h2>
-            <p>Wende nun die Formel $F_G = m \cdot g$ an. Nutze die Tabelle auf S. 85 in deinem Buch für die Ortsfaktoren.</p>
-            <ul class="task-list">
-                <li><strong>1. Auf der Erde:</strong> Berechne deine eigene Gewichtskraft auf der Erde. Runde deine Masse auf eine ganze Zahl.</li>
-                <li><strong>2. Auf dem Mars:</strong> Deine Masse bleibt gleich. Berechne deine Gewichtskraft auf dem Mars.</li>
-                <li><strong>3. Der Riese:</strong> Auf welchem Planeten aus der Tabelle wäre deine Gewichtskraft am größten? Berechne sie.</li>
-                <li class="expert">
-                    <strong>4. Expertenmission:</strong> Der Zwergplanet Pluto (Ortsfaktor ca. 0,62 N/kg) fehlt in der Tabelle. Ein Space-Shuttle hat eine Masse von ca. 78 Tonnen (Achtung: in kg umrechnen!). Berechne die Gewichtskraft des Shuttles auf der Erde und auf Pluto.
-                </li>
-            </ul>
-            <div class="info-box">
-                <strong>Tipp zur Selbstkontrolle:</strong> Du kannst deine Ergebnisse mit einem Online-Rechner überprüfen!
-                <br><a href="https://www.lernort-mint.de/physik/astronomie/das-gewicht-gewichtskraft-auf-anderen-planeten/" target="_blank" class="tool-link">Online-Gewichtskraftrechner</a>
-                <br>Oder übe weiter in der ANTON-App.
-                <br><a href="https://anton.app/de/lernen/physik/thema-02-mechanik/uebungen-04-kraftwirkungen/uebung-02/" target="_blank" class="tool-link">ANTON-App Übung</a>
             </div>
-        </div>
-
         <div class="step">
             <h2>Schritt 4: Kreativer Transfer (Hausaufgabe)</h2>
-            <p>Wähle EINE der folgenden beiden Aufgaben, um dein neues Wissen kreativ anzuwenden.</p>
-            <div class="task">
-                <h3>Option A: Die Concept Map</h3>
-                <p>Fasse die wichtigsten Begriffe der Stunde (Masse, Gewichtskraft, Ortsfaktor, Newton, Kilogramm, ortsabhängig, ortsunabhängig) in einer digitalen Concept Map zusammen. Erkläre mit Verbindungslinien die Zusammenhänge.</p>
-                <a href="https://www.mindmup.com/" target="_blank" class="tool-link">Concept Map mit MindMup erstellen</a>
             </div>
-            <div class="task expert">
-                <h3>Option B: Der Weltraumlift</h3>
-                <p>Eine Vision der Raumfahrt ist ein Aufzug ins All. Recherchiere, warum die enorme <strong>Gewichtskraft des Seils</strong> das größte Problem bei diesem Projekt ist. Erstelle eine Infografik (eine Seite), die dieses Problem erklärt.</p>
-                <a href="https://www.canva.com/de_de/erstellen/infografiken/" target="_blank" class="tool-link">Infografik mit Canva erstellen</a>
-                <div class="info-box">
-                    <strong>Starter-Links für deine Recherche:</strong><br>
-                    <ul>
-                        <li><a href="https://www.dlr.de/de/next/raumfahrt/spannendes/ihr-fragt-wir-antworten/mit-einer-schnur-zu-anderen-himmelskorpern" target="_blank">DLR: Mit einer Schnur zu anderen Himmelskörpern</a></li>
-                        <li><a href="https://magazin.schindler.de/technologie/weltraumlift-mit-dem-aufzug-ins-all" target="_blank">Weltraumlift: Mit dem Aufzug ins All</a></li>
-                        <li><a href="https://www.ingenieur.de/technik/fachbereiche/raumfahrt/japaner-experimentieren-auf-der-iss-mit-weltraum-aufzug/" target="_blank">Japaner experimentieren mit Weltraum-Aufzug</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
     </div>
+
+    <script>
+        const form = document.getElementById('hypothesis-form');
+        const statusDiv = document.getElementById('submit-status');
+        const submitButton = form.querySelector('.submit-button');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault(); // Verhindert das Neuladen der Seite
+            
+            // HIER IHRE WEB-APP-URL EINFÜGEN
+            const scriptURL = 'HIER_IHRE_WEB_APP_URL_EINFÜGEN';
+            
+            submitButton.disabled = true;
+            statusDiv.textContent = 'Sende...';
+            statusDiv.style.color = 'orange';
+
+            fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+               .then(response => {
+                    statusDiv.textContent = 'Erfolgreich gesendet!';
+                    statusDiv.style.color = 'green';
+                    submitButton.disabled = false;
+                    form.reset(); // Optional: Formular nach Erfolg leeren
+                })
+               .catch(error => {
+                    statusDiv.textContent = 'Fehler beim Senden. Bitte erneut versuchen.';
+                    statusDiv.style.color = 'red';
+                    console.error('Error!', error.message);
+                    submitButton.disabled = false;
+                });
+        });
+    </script>
 
 </body>
 </html>
