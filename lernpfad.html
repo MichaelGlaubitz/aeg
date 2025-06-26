@@ -98,17 +98,31 @@
             statusDiv.textContent = 'Sende...';
             statusDiv.style.color = 'orange';
 
+            // Ersetzen Sie den fetch-Teil in Ihrer HTML-Datei hiermit:
+            
             fetch(scriptURL, { method: 'POST', body: new FormData(form)})
-               .then(response => {
-                    statusDiv.textContent = 'Erfolgreich gesendet!';
+                .then(response => {
+                    // Wir prüfen, ob die Antwort vom Skript wirklich positiv war
+                    return response.text().then(text => {
+                        if (!response.ok || !text.startsWith("Erfolg")) {
+                            // Wenn die Antwort ein Fehler ist, werfen wir einen Fehler,
+                            // damit er im .catch() Block landet.
+                            throw new Error(text || 'Unbekannter Serverfehler.');
+                        }
+                        return text;
+                    });
+                })
+                .then(successMessage => {
+                    statusDiv.textContent = 'Erfolgreich gesendet!'; // Oder successMessage
                     statusDiv.style.color = 'green';
                     submitButton.disabled = false;
-                    form.reset(); // Optional: Formular nach Erfolg leeren
+                    form.reset(); // Formular leeren
                 })
-               .catch(error => {
-                    statusDiv.textContent = 'Fehler beim Senden. Bitte erneut versuchen.';
+                .catch(error => {
+                    // Hier landen jetzt sowohl Netzwerkfehler als auch Fehler vom Skript
+                    statusDiv.textContent = 'Fehler: ' + error.message;
                     statusDiv.style.color = 'red';
-                    console.error('Error!', error.message);
+                    console.error('Fehler beim Senden!', error.message);
                     submitButton.disabled = false;
                 });
         });
