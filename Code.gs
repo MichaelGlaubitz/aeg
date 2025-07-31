@@ -285,17 +285,18 @@ function createFormFromText(text, formTitle) {
     SpreadsheetApp.flush(); // Warten, bis die Verknüpfung aktiv ist
 
     // KORRIGIERTE LOGIK: Das neue Antwort-Blatt wird zuverlässig gefunden und umbenannt.
-    const formUrl = form.getPublishedUrl();
+    const formId = form.getId();
     const allSheets = spreadsheet.getSheets();
     let newSheet = null;
     for (let i = 0; i < allSheets.length; i++) {
         const currentSheet = allSheets[i];
         try {
-            if (currentSheet.getFormUrl() === formUrl) {
+            const linkedFormUrl = currentSheet.getFormUrl();
+            if (linkedFormUrl && FormApp.openByUrl(linkedFormUrl).getId() === formId) {
                 newSheet = currentSheet;
                 break;
             }
-        } catch(e) { /* Ignoriere Blätter ohne Formular-Link */ }
+        } catch(e) { /* Ignoriere Blätter ohne Formular-Link oder Berechtigungsprobleme */ }
     }
     
     if (newSheet) {
@@ -312,7 +313,6 @@ function createFormFromText(text, formTitle) {
     
     // Quiz-Titel und Edit-URL für den Trigger speichern
     const editUrl = form.getEditUrl();
-    const formId = form.getId();
     const properties = PropertiesService.getScriptProperties();
     properties.setProperty(`${formId}_title`, formTitle);
     properties.setProperty(`${formId}_editUrl`, editUrl);
