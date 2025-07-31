@@ -42,17 +42,16 @@
         overflow-y: auto;
         display: none;
       }
-      /* Stil für den neuen Link-Button */
       .link-button {
         background-color: #00aaff;
         color: white;
-        padding: 7px 15px;
+        padding: 7px 10px; /* Horizontalen Abstand reduziert */
         border-radius: 2px;
         text-decoration: none;
         font-size: 14px;
         font-weight: bold;
         border: 1px solid transparent;
-        margin-left: 10px;
+        margin-left: 5px; /* Linken Abstand reduziert */
       }
       .link-button:hover {
         background-color: #0088cc;
@@ -80,9 +79,11 @@
           <button class="action" onclick="submitForm()">Quiz erstellen</button>
           <button onclick="google.script.host.close()">Abbrechen</button>
         </div>
-        <div>
+        <!-- KORRIGIERTE LOGIK: Flexbox für sauberen Zeilenumbruch der Buttons -->
+        <div style="display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; gap: 5px;">
           <button onclick="generatePreview()">Vorschau anzeigen</button>
-          <!-- NEUER BUTTON -->
+          <a href="https://editor.codecogs.com/" target="_blank" class="link-button">LaTeX-Editor</a>
+          <a href="https://gemini.google.com/gem/0cfd50c4b0fd" target="_blank" class="link-button">Gemini fragen</a>
           <a href="https://chatgpt.com/g/g-688a3fbab4a08191afcb1bd930a1d59c-google-quiz-generator" target="_blank" class="link-button">ChatGPT fragen</a>
         </div>
       </div>
