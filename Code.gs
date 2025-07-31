@@ -81,6 +81,55 @@ function parseLineToLatex(text) {
   return result.trim();
 }
 
+/**
+ * Dieser Trigger wird bei jeder neuen Formular-Antwort ausgeführt.
+ * Er fügt den Quiz-Titel und den Bearbeitungs-Link in die neue Zeile ein.
+ * @param {Object} e Das Event-Objekt der Formular-Antwort.
+ */
+function addExtraDataOnSubmit(e) {
+  try {
+    const sheet = e.range.getSheet();
+    const formUrl = sheet.getFormUrl();
+    if (!formUrl) return; // Nicht von einem Formular
+
+    const form = FormApp.openByUrl(formUrl);
+    const formId = form.getId();
+    
+    // Gespeicherte Daten für dieses Formular abrufen
+    const properties = PropertiesService.getScriptProperties();
+    const formTitle = properties.getProperty(`${formId}_title`);
+    const editUrl = properties.getProperty(`${formId}_editUrl`);
+
+    if (!formTitle || !editUrl) return; // Keine Daten für dieses Formular gespeichert
+
+    // Prüfen, ob die Spalten "Quiz-Titel" und "Link zum Bearbeiten" bereits existieren
+    const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+    let titleColumnIndex = headers.indexOf("Quiz-Titel") + 1;
+    let linkColumnIndex = headers.indexOf("Link zum Bearbeiten") + 1;
+
+    // Wenn die Spalten nicht existieren, erstelle sie
+    if (linkColumnIndex === 0) {
+      sheet.insertColumnBefore(1);
+      sheet.getRange(1, 1).setValue("Link zum Bearbeiten").setFontWeight("bold");
+      linkColumnIndex = 1;
+    }
+    if (titleColumnIndex === 0) {
+      sheet.insertColumnBefore(1);
+      sheet.getRange(1, 1).setValue("Quiz-Titel").setFontWeight("bold");
+      titleColumnIndex = 1;
+      linkColumnIndex++; // Index der Link-Spalte hat sich verschoben
+    }
+
+    // Füge den Titel und den Link in die Zeile der neuen Antwort ein
+    const row = e.range.getRow();
+    sheet.getRange(row, titleColumnIndex).setValue(formTitle);
+    sheet.getRange(row, linkColumnIndex).setFormula(`=HYPERLINK("${editUrl}"; "Bearbeiten")`);
+    
+  } catch (err) {
+    Logger.log(`Fehler im onFormSubmit Trigger: ${err.toString()}`);
+  }
+}
+
 
 /**
  * Generiert eine HTML-Vorschau der Quiz-Bilder.
@@ -223,7 +272,6 @@ function createFormFromText(text, formTitle) {
                   .setRequired(true)
                   .setPoints(1);
       
-      // KORRIGIERTE LOGIK: Erstellt die Ankreuz-Optionen zuverlässig
       const finalChoices = shuffledChoicesData.map((choice, i) => {
         const letter = String.fromCharCode(65 + i);
         const choiceText = `Antwort ${letter}`;
@@ -232,23 +280,24 @@ function createFormFromText(text, formTitle) {
       questionItem.setChoices(finalChoices);
     });
 
-    // Sheet umbenennen und Titel-Spalte hinzufügen
-    const sheetsBefore = spreadsheet.getSheets();
+    // Formular mit Tabelle verknüpfen und Sheet umbenennen
     form.setDestination(FormApp.DestinationType.SPREADSHEET, spreadsheet.getId());
-    SpreadsheetApp.flush();
+    SpreadsheetApp.flush(); // Warten, bis die Verknüpfung aktiv ist
 
-    const sheetsAfter = spreadsheet.getSheets();
+    // KORRIGIERTE LOGIK: Das neue Antwort-Blatt wird zuverlässig gefunden und umbenannt.
+    const formUrl = form.getPublishedUrl();
+    const allSheets = spreadsheet.getSheets();
     let newSheet = null;
-    if (sheetsAfter.length > sheetsBefore.length) {
-        const sheetsBeforeIds = sheetsBefore.map(s => s.getSheetId());
-        for (let i = 0; i < sheetsAfter.length; i++) {
-            if (sheetsBeforeIds.indexOf(sheetsAfter[i].getSheetId()) == -1) {
-                newSheet = sheetsAfter[i];
+    for (let i = 0; i < allSheets.length; i++) {
+        const currentSheet = allSheets[i];
+        try {
+            if (currentSheet.getFormUrl() === formUrl) {
+                newSheet = currentSheet;
                 break;
             }
-        }
+        } catch(e) { /* Ignoriere Blätter ohne Formular-Link */ }
     }
-
+    
     if (newSheet) {
         try {
             let sheetName = formTitle.substring(0, 100);
@@ -256,24 +305,36 @@ function createFormFromText(text, formTitle) {
                 sheetName = `${sheetName} (Antworten)`;
             }
             newSheet.setName(sheetName);
-            
-            const titleFormula = `={"Quiz-Titel"; ARRAYFORMULA(IF(B2:B<>""; "${formTitle.replace(/"/g, '""')}"; ""))}`;
-            const formulaCell = newSheet.getRange(1, 1);
-            if (newSheet.getRange(1, 2).getValue() === 'Zeitstempel') {
-              newSheet.insertColumnBefore(1);
-              formulaCell.setFormula(titleFormula);
-              formulaCell.setFontWeight("bold");
-              newSheet.autoResizeColumn(1);
-            }
-
         } catch (e) {
-            Logger.log(`Fehler beim Anpassen des Antwort-Sheets: ${e.toString()}`);
+            Logger.log(`Fehler beim Umbenennen des Antwort-Sheets: ${e.toString()}`);
         }
+    }
+    
+    // Quiz-Titel und Edit-URL für den Trigger speichern
+    const editUrl = form.getEditUrl();
+    const formId = form.getId();
+    const properties = PropertiesService.getScriptProperties();
+    properties.setProperty(`${formId}_title`, formTitle);
+    properties.setProperty(`${formId}_editUrl`, editUrl);
+
+    // Trigger erstellen, der bei jeder neuen Antwort feuert
+    const triggers = ScriptApp.getProjectTriggers();
+    let triggerExists = false;
+    for (let i = 0; i < triggers.length; i++) {
+        if (triggers[i].getHandlerFunction() === 'addExtraDataOnSubmit' && triggers[i].getTriggerSourceId() === spreadsheet.getId()) {
+            triggerExists = true;
+            break;
+        }
+    }
+    if (!triggerExists) {
+        ScriptApp.newTrigger('addExtraDataOnSubmit')
+            .forSpreadsheet(spreadsheet)
+            .onFormSubmit()
+            .create();
     }
 
 
     // Erfolgsmeldung mit klickbaren Links anzeigen
-    const editUrl = form.getEditUrl();
     const publishUrl = form.getPublishedUrl();
     
     const htmlMessage = `
