@@ -168,12 +168,12 @@ function generatePreviewHtml(text) {
 
     // 2. Bild für die Antworten erstellen
     const shuffledChoicesData = shuffleArray(allChoicesData);
-    let answersLatexString = '\\normalsize \\begin{array}{ll} \n';
+    let answersLatexString = '\\normalsize \\begin{array}{l} \n';
 
     shuffledChoicesData.forEach((choice, i) => {
       const letter = String.fromCharCode(65 + i);
       const answerContent = parseLineToLatex(choice.content);
-      answersLatexString += `\\text{${letter}) } & ${answerContent} \\\\ \\\\ \n`;
+      answersLatexString += `\\text{${letter}) } ${answerContent} \\\\ \\\\ \n`;
     });
     answersLatexString += '\\end{array}';
     const answersImageUrl = `https://latex.codecogs.com/png.latex?${encodeURIComponent(answersLatexString)}`;
@@ -247,12 +247,12 @@ function createFormFromText(text, formTitle) {
 
       // 2. Bild für die Antworten erstellen
       const shuffledChoicesData = shuffleArray(allChoicesData);
-      let answersLatexString = '\\normalsize \\begin{array}{ll} \n';
+      let answersLatexString = '\\normalsize \\begin{array}{l} \n';
       
       shuffledChoicesData.forEach((choice, i) => {
         const letter = String.fromCharCode(65 + i); // A, B, C...
         const answerContent = parseLineToLatex(choice.content);
-        answersLatexString += `\\text{${letter}) } & ${answerContent} \\\\ \\\\ \n`;
+        answersLatexString += `\\text{${letter}) } ${answerContent} \\\\ \\\\ \n`;
       });
       answersLatexString += '\\end{array}';
       const answersImageUrl = `https://latex.codecogs.com/png.latex?${encodeURIComponent(answersLatexString)}`;
