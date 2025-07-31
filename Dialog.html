@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons1.css">
+    <style>
+      .error-message {
+        color: red;
+        font-size: 12px;
+        margin-top: 5px;
+        height: 15px;
+      }
+      .loader-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.7);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+      }
+      .loader {
+        border: 8px solid #f3f3f3;
+        border-top: 8px solid #4285f4;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        animation: spin 1s linear infinite;
+      }
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      #previewContainer {
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 1px solid #ccc;
+        max-height: 200px;
+        overflow-y: auto;
+        display: none;
+      }
+      /* Stil für den neuen Link-Button */
+      .link-button {
+        background-color: #00aaff;
+        color: white;
+        padding: 7px 15px;
+        border-radius: 2px;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: bold;
+        border: 1px solid transparent;
+        margin-left: 10px;
+      }
+      .link-button:hover {
+        background-color: #0088cc;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="loader" class="loader-overlay">
+      <div class="loader"></div>
+    </div>
+
+    <div class="main-container">
+      <div class="form-row">
+        <label for="formTitle">Titel des Quiz:</label>
+        <input type="text" id="formTitle" placeholder="z.B. Physik-Test Stromkreis">
+        <p id="titleError" class="error-message"></p>
+      </div>
+      <div class="form-row">
+        <label for="quizText">Quiz-Text:</label>
+        <textarea id="quizText" rows="10" style="width: 100%;" placeholder="Frage 1\n*Antwort 1\nAntwort 2..."></textarea>
+        <p id="textError" class="error-message"></p>
+      </div>
+      <div class="form-row block" style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <button class="action" onclick="submitForm()">Quiz erstellen</button>
+          <button onclick="google.script.host.close()">Abbrechen</button>
+        </div>
+        <div>
+          <button onclick="generatePreview()">Vorschau anzeigen</button>
+          <!-- NEUER BUTTON -->
+          <a href="https://chatgpt.com/g/g-688a3fbab4a08191afcb1bd930a1d59c-google-quiz-generator" target="_blank" class="link-button">ChatGPT fragen</a>
+        </div>
+      </div>
+
+      <div id="previewContainer">
+        <p>Vorschau wird geladen...</p>
+      </div>
+    </div>
+
+    <script>
+      const titleError = document.getElementById('titleError');
+      const textError = document.getElementById('textError');
+      const titleInput = document.getElementById('formTitle');
+      const textInput = document.getElementById('quizText');
+      const loader = document.getElementById('loader');
+      const previewContainer = document.getElementById('previewContainer');
+
+      titleInput.addEventListener('input', () => titleError.textContent = '');
+      textInput.addEventListener('input', () => textError.textContent = '');
+
+      function generatePreview() {
+        previewContainer.style.display = 'block';
+        previewContainer.innerHTML = '<p>Vorschau wird geladen...</p>';
+        const text = textInput.value;
+        google.script.run
+            .withSuccessHandler(html => {
+              previewContainer.innerHTML = html;
+            })
+            .withFailureHandler(err => {
+              previewContainer.innerHTML = `<p style="color: red;">Fehler bei der Vorschau: ${err}</p>`;
+            })
+            .generatePreviewHtml(text);
+      }
+
+      function submitForm() {
+        titleError.textContent = '';
+        textError.textContent = '';
+
+        const title = titleInput.value;
+        if (title.trim() === '') {
+          titleError.textContent = 'Bitte geben Sie einen Titel für das Quiz ein.';
+          return;
+        }
+
+        const text = textInput.value;
+        if (text.trim() === '') {
+          textError.textContent = 'Bitte geben Sie den Quiz-Text ein.';
+          return;
+        }
+
+        loader.style.display = 'flex';
+        const actionButton = document.querySelector('.action');
+        actionButton.disabled = true;
+
+        google.script.run
+            .withSuccessHandler(() => google.script.host.close())
+            .withFailureHandler(err => {
+                loader.style.display = 'none';
+                alert('Fehler: ' + err); 
+                actionButton.disabled = false;
+            })
+            .createFormFromText(text, title);
+      }
+    </script>
+  </body>
+</html>
